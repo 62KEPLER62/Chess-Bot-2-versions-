@@ -5,3 +5,11 @@ I have been working for javascript for a while and I made this chess bot with 2 
 I tried to used minimax algorithm in this bot.
 Graphics of the bot is made with html, javascirpt and css.
 On top of the website you can see how many moves have the bot calculated.
+
+DEMOS:
+
+VERSION 1:
+https://satranc.netlify.app/
+
+VERSION 2:
+https://satranc2.netlify.app/
