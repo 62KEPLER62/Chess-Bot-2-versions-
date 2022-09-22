@@ -1,0 +1,2261 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #121212;
+        }
+
+        #masa {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+            width: 800px;
+            height: 800px;
+        }
+
+        .cube {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+        }
+
+        .cube2 {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+        }
+
+        .blackcube {
+            background-color: #996633;
+        }
+
+        .whitecube {
+            background-color: #d9b38c;
+        }
+
+        .tcube {
+            z-index: 1;
+        }
+
+        .redcube {
+            background-color: red;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .tas {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            z-index: 1;
+        }
+
+        .lds-spinner {
+            color: official;
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-spinner div {
+            transform-origin: 40px 40px;
+            animation: lds-spinner 1.2s linear infinite;
+        }
+
+        .lds-spinner div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 37px;
+            width: 6px;
+            height: 18px;
+            border-radius: 20%;
+            background: #fff;
+        }
+
+        .lds-spinner div:nth-child(1) {
+            transform: rotate(0deg);
+            animation-delay: -1.1s;
+        }
+
+        .lds-spinner div:nth-child(2) {
+            transform: rotate(30deg);
+            animation-delay: -1s;
+        }
+
+        .lds-spinner div:nth-child(3) {
+            transform: rotate(60deg);
+            animation-delay: -0.9s;
+        }
+
+        .lds-spinner div:nth-child(4) {
+            transform: rotate(90deg);
+            animation-delay: -0.8s;
+        }
+
+        .lds-spinner div:nth-child(5) {
+            transform: rotate(120deg);
+            animation-delay: -0.7s;
+        }
+
+        .lds-spinner div:nth-child(6) {
+            transform: rotate(150deg);
+            animation-delay: -0.6s;
+        }
+
+        .lds-spinner div:nth-child(7) {
+            transform: rotate(180deg);
+            animation-delay: -0.5s;
+        }
+
+        .lds-spinner div:nth-child(8) {
+            transform: rotate(210deg);
+            animation-delay: -0.4s;
+        }
+
+        .lds-spinner div:nth-child(9) {
+            transform: rotate(240deg);
+            animation-delay: -0.3s;
+        }
+
+        .lds-spinner div:nth-child(10) {
+            transform: rotate(270deg);
+            animation-delay: -0.2s;
+        }
+
+        .lds-spinner div:nth-child(11) {
+            transform: rotate(300deg);
+            animation-delay: -0.1s;
+        }
+
+        .lds-spinner div:nth-child(12) {
+            transform: rotate(330deg);
+            animation-delay: 0s;
+        }
+
+        @keyframes lds-spinner {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        #yuklenme {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+            border-radius: 50%;
+            display: none;
+        }
+
+        footer {
+            color: white;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            bottom: 10px;
+            left: 50%;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="h1" style="color:white"></h1>
+    <div id="masa"></div>
+    <div id="yuklenme">
+        <div class="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <footer>Made by Rüzgar Erçen</footer>
+    <script>
+        const audio = new Audio("https://cdn.discordapp.com/attachments/989901867259666472/1010580851236544633/tas.mp3");
+        const h1 = document.getElementById("h1");
+        const loader = document.getElementById("yuklenme");
+        let interval = 0;
+        let sayac = 0;
+        let interval3 = 0;
+        const taslar = {
+            "S": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Chess_kdt45.svg/45px-Chess_kdt45.svg.png"',
+            "s": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Chess_klt45.svg/45px-Chess_klt45.svg.png"',
+            "F": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/45px-Chess_bdt45.svg.png"',
+            "f": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Chess_blt45.svg/45px-Chess_blt45.svg.png"',
+            "A": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Chess_ndt45.svg/45px-Chess_ndt45.svg.png"',
+            "a": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chess_nlt45.svg/45px-Chess_nlt45.svg.png"',
+            "K": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chess_rdt45.svg/45px-Chess_rdt45.svg.png"',
+            "k": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chess_rlt45.svg/45px-Chess_rlt45.svg.png"',
+            "P": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png"',
+            "p": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png"',
+            "V": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Chess_qdt45.svg/45px-Chess_qdt45.svg.png"',
+            "v": '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Chess_qlt45.svg/45px-Chess_qlt45.svg.png"',
+        }
+        let bsah = 60;
+        let ssah = 4;
+        let code = "KAFVSFAKPPPPPPPP00000000000000000000000000000000ppppppppkafvsfak";
+        let legalcode = "KAFVSFAKPPPPPPPP00000000000000000000000000000000ppppppppkafvsfak";
+        legalcode = legalcode.split("");
+        code = code.split("");
+        let hamle = 0;
+        let tasinacakyer;
+        let tasinabilir = false;
+        let tasiyer;
+        let tasinacakrenk;
+        const masa = document.getElementById("masa");
+        let kareler = [];
+        let yedek = [...code];
+        let yedekl = [...code];
+        let buggercode = [...code];
+        let buggerlegalcode = [...legalcode];
+        let buggerssah = ssah;
+        let buggerbsah = bsah;
+        //burayı fonksiyn aal
+        function preparetable() {
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    kareler.push(`<div class="cube ${(i + j) % 2 == 0 ? "whitecube" : "blackcube"}" style="top:${i * 100 + "px"};left:${j * 100 + "px"};"></div>`);
+                }
+            }
+            masa.innerHTML = kareler.join('');
+        }
+        function decode(code) {
+            let html = [];
+            let k = 0;
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++, k++) {
+                    if (code[k] != "0" && code[k] != "1") {
+                        let str = code[k].toLowerCase() == code[k] ? "white" : "black";
+                        if (i == 0 && code[k] == "p") {
+                            html.push(taslar["v"] + ` class="tas" style="top:${i * 100}px;left:${j * 100}px;" onclick="tasi(this)" id="${"tas-" + k + "-" + str}"` + ">");
+                            code[k] = "v";
+                            legalcode[k] = "v";
+                        }
+                        else if (i == 7 && code[k] == "P") {
+                            html.push(taslar["V"] + ` class="tas" style="top:${i * 100}px;left:${j * 100}px;" onclick="tasi(this)" id="${"tas-" + k + "-" + str}"` + ">");
+                            code[k] = "V";
+                            legalcode[k] = "V";
+                        }
+                        else {
+                            html.push(taslar[code[k]] + ` class="tas" style="top:${i * 100}px;left:${j * 100}px;" onclick="tasi(this)" id="${"tas-" + k + "-" + str}"` + ">");
+                        }
+                    }
+                    else {
+                        html.push(`<div class="cube tcube" style="top:${i * 100 + "px"};left:${j * 100 + "px"};"  id="${"cube-" + k}"></div>`);
+                    }
+                }
+            }
+            masa.innerHTML = kareler.join('') + html.join('');
+        }
+
+        function tasi(html) {
+            legalcode = [...code];
+            let oynayacak;
+            if (hamle % 2 == 0) {
+                oynayacak = "white";
+            }
+            else {
+                oynayacak = "black";
+            }
+            if (tasinabilir && !html.classList.contains("cube") && tasinacakyer != html.id.split("-")[1] && html.id.split("-")[2] != tasinacakrenk && html.classList.contains("redcube")) {
+                audio.play();
+                tasinabilir = false;
+                tasinanyer = html.id.split("-")[1];
+                if (tasinacakyer == ssah) {
+                    ssah = tasinanyer;
+                }
+                if (tasinacakyer == bsah) {
+                    bsah = tasinanyer;
+                }
+                code[tasinanyer] = code[tasinacakyer];
+                code[tasinacakyer] = "0";
+                legalcode = [...code];
+                hamle++;
+                decode(code);
+                oynabot();
+            }
+            else {
+                if (tasinabilir && html.classList.contains("cube")) {
+                    tasinabilir = false;
+                    tasinanyer = html.id.split("-")[1];
+                    if (tasinacakyer == ssah) {
+                        ssah = parseInt(tasinanyer);
+                    }
+                    if (tasinacakyer == bsah) {
+                        bsah = parseInt(tasinanyer);
+                    }
+                    let temp = code[tasinanyer];
+                    code[tasinanyer] = code[tasinacakyer];
+                    code[tasinacakyer] = temp;
+                    hamle++;
+                    legalcode = [...code];
+                    decode(code);
+                    oynabot();
+                }
+                if (!html.classList.contains("cube") && html.id.split("-")[2] == oynayacak) {
+                    tasinabilir = true;
+                    decode(code);
+                    tasinacakrenk = html.id.split("-")[2];
+                    tasinacakyer = html.id.split("-")[1];
+                    showlegalmoves(tasinacakyer);
+                }
+            }
+        }
+        function oynabot() {
+            loader.style.display = "inline-block";
+            buggercode = [...code];
+            buggerlegalcode = [buggerlegalcode];
+            buggerssah = ssah;
+            buggerbsah = bsah
+            setTimeout(() => {
+                let hesaplama = movegenerationtest();
+                h1.innerHTML = "Hesaplanan pozisyonlar: " + hesaplama;
+                loader.style.display = "none";
+            }, 10);
+            setTimeout(()=>{
+                audio.pause();
+                audio.play();
+            },150);
+        }
+
+        function oyna(bas, son) {
+            if (code[bas] == "p") {
+                if (son < 8) {
+                    code[son] = "v";
+                    code[bas] = "0";
+                    legalcode[son] = "v";
+                    legalcode[bas] = "0";
+                    hamle++;
+                    return;
+                }
+            }
+            if (code[bas] == "P") {
+                if (son > 55) {
+                    code[son] = "V";
+                    code[bas] = "0";
+                    legalcode[son] = "V";
+                    legalcode[bas] = "0";
+                    hamle++;
+                    return;
+                }
+            }
+            if (code[bas] == "s") {
+                bsah = son;
+            }
+            if (code[bas] == "S") {
+                ssah = son;
+            }
+            code[son] = code[bas];
+            code[bas] = "0";
+            legalcode[son] = legalcode[bas];
+            legalcode[bas] = "0";
+            hamle++;
+        }
+
+        function puanhesapla(position) {
+            let puan = 0;
+            for (let i = 0; i < 64; i++) {
+                if (code[i] != "0") {
+
+                    switch (code[i]) {
+                        case "K":
+                            puan += 7;
+                            break;
+                        case "A":
+                            puan += 5;
+                            break;
+                        case "F":
+                            puan += 5;
+                            break;
+                        case "V":
+                            puan += 10;
+                            break;
+                        case "S":
+                            puan += 100;
+                            break;
+                        case "P":
+                            puan += 1;
+                            break;
+                        //devam
+                        case "k":
+                            puan -= 7;
+                            break;
+                        case "a":
+                            puan -= 5;
+                            break;
+                        case "f":
+                            puan -= 5;
+                            break;
+                        case "v":
+                            puan -= 10;
+                            break;
+                        case "s":
+                            puan -= 100;
+                            break;
+                        case "p":
+                            puan -= 1;
+                            break;
+                    }
+
+                }
+            }
+            return puan;
+        }
+        function compare(a, b) {
+            if (a.puan <= b.puan) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        }
+        function movegenerationtest() {
+            let sayma = 0;
+            let beyazeniyi = Infinity;
+            let beyazeniyiarr = [];
+            let tcode = [...code];
+            let buggerssah1 = ssah;
+            let buggerbsah1 = bsah;
+            let tlegalcode = [...legalcode];
+            let moves = movearrayfinder();
+            if(moves.length<1){
+                h1.innerHTML = "Beyaz kazandı";
+            }
+            let i = 0;
+            for (let move of moves) {
+                for (let hareket of move.hareketler) {
+                    beyazeniyi = Infinity;
+                    hamle = 1;
+                    oyna(move.tas, hareket);
+                    hamle = 0;
+                    //console.log(move.tas, hareket)
+                    //siyah simüle ediliyor
+                    let tcode2 = [...code];
+                    let tlegalcode2 = [...legalcode];
+                    buggerbsah2 = bsah;
+                    buggerssah2 = ssah;
+                    let secondmoves = movearrayfinder();
+                    if (secondmoves.length < 1) {
+                        beyazeniyiarr.push({ "puan": +10000, "hamle": [move.tas, hareket] });
+                        setTimeout(()=>{
+                            h1.innerHTML = "Siyah kazandı";
+                        },1000);
+                    }
+                    else {
+                        for (let secondmove of secondmoves) {
+                            for (let secondhareket of secondmove.hareketler) {
+                                sayma++;
+                                oyna(secondmove.tas, secondhareket);
+                                let thirdmoves = matmi();
+                                if (!thirdmoves) {
+                                    beyazeniyi = -10000;
+                                    beyazeniyiarr[i] = { "puan": -10000, "hamle": [move.tas, hareket] };
+                                    hamle--;
+                                    continue;
+                                }
+                                if (puanhesapla() <= beyazeniyi) {
+                                    beyazeniyi = puanhesapla();
+                                    beyazeniyiarr[i] = { "puan": puanhesapla(), "hamle": [move.tas, hareket] };
+                                }
+                                hamle--;
+                            }
+                            code = [...tcode2];
+                            legalcode = [...tlegalcode2];
+                            ssah = buggerssah2;
+                            bsah = buggerbsah2;
+                        }
+                    }
+                    code = [...tcode];
+                    legalcode = [...tlegalcode];
+                    ssah = buggerssah1;
+                    bsah = buggerbsah1;
+                    i++;
+                }
+            }
+            hamle--;
+            beyazeniyiarr.sort(compare);
+            let u = beyazeniyiarr.length;
+            let eb = beyazeniyiarr[0].puan;
+            for (let i = 0; i < u; i++) {
+                if (beyazeniyiarr[i].puan != eb) {
+                    beyazeniyiarr.splice(i, beyazeniyiarr.length - i);
+                    break;
+                }
+            }
+            let rand = Math.round(Math.random() * (beyazeniyiarr.length - 1));
+            let bas = beyazeniyiarr[rand].hamle[0];
+            let son = beyazeniyiarr[rand].hamle[1];
+            code = [...buggercode];
+            legalcode = [...buggerlegalcode];
+            ssah = buggerssah;
+            bsah = buggerbsah
+            oyna(bas, son);
+            decode(code)
+            return sayma;
+        }
+
+
+        function movearrayfinder() {
+            let moves = [];
+            for (let i = 0; i < 64; i++) {
+                if (hamle % 2 == 1) {
+
+                    if (code[i] != "0" && code[i].toUpperCase() == code[i]) {
+                        let ltemp = [...legalcode];
+                        let ctemp = [...code];
+                        let varmi = generatemoves(i);
+                        if (varmi) {
+                            let arr = producelegalmoves(i)
+                            if (arr.length > 0) {
+                                moves.push({ "tas": i, "hareketler": arr });
+                            }
+                        }
+                        legalcode = [...ltemp];
+                        code = [...ctemp];
+                    }
+                }
+                else {
+                    if (code[i] != "0" && code[i].toLowerCase() == code[i]) {
+                        let ltemp = [...legalcode];
+                        let ctemp = [...code];
+                        let varmi = generatemoves(i);
+                        if (varmi) {
+                            let arr = producelegalmoves(i)
+                            if (arr.length > 0) {
+                                moves.push({ "tas": i, "hareketler": arr });
+                            }
+                        }
+                        legalcode = [...ltemp];
+                        code = [...ctemp];
+                    }
+                }
+
+            }
+            return moves;
+        }
+
+        function matmi() {
+            let moves = [];
+            for (let i = 0; i < 64; i++) {
+                if (hamle % 2 == 1) {
+
+                    if (code[i] != "0" && code[i].toUpperCase() == code[i]) {
+                        let ltemp = [...legalcode];
+                        let ctemp = [...code];
+                        let varmi = generatemoves(i);
+                        if (varmi) {
+                            let arr = producelegalmoves(i)
+                            if (arr.length > 0) {
+                                legalcode = [...ltemp];
+                                code = [...ctemp];
+                                return true;
+                            }
+                            legalcode = [...ltemp];
+                            code = [...ctemp];
+                        }
+                        legalcode = [...ltemp];
+                        code = [...ctemp];
+                    }
+                }
+                else {
+                    if (code[i] != "0" && code[i].toLowerCase() == code[i]) {
+                        let ltemp = [...legalcode];
+                        let ctemp = [...code];
+                        let varmi = generatemoves(i);
+                        if (varmi) {
+                            let arr = producelegalmoves(i)
+                            if (arr.length > 0) {
+                                legalcode = [...ltemp];
+                                code = [...ctemp];
+                                return true;
+                            }
+                            legalcode = [...ltemp];
+                            code = [...ctemp];
+                        }
+                        legalcode = [...ltemp];
+                        code = [...ctemp];
+                    }
+                }
+
+            }
+            return false;
+        }
+
+
+
+
+
+
+        function showlegalmoves(yer) {
+            generatemoves(yer);
+            filterpsudocodes(yer);
+            let html = [];
+            let k = 0;
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++, k++) {
+                    if (legalcode[k] == "1") {
+                        html.push(`<div class="cube2 redcube" style="top:${i * 100 + "px"};left:${j * 100 + "px"};" onclick="tasi(this)" id="${"cube2-" + k}"></div>`);
+                    }
+                }
+            }
+            masa.insertAdjacentHTML("beforeend", html);
+        }
+        function producelegalmoves(yer) {
+            generatemoves(yer);
+            filterpsudocodes(yer);
+            let arr = [];
+            let k = 0;
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++, k++) {
+                    if (legalcode[k] == "1") {
+                        arr.push(k);
+                    }
+                }
+            }
+            return arr;
+        }
+        function filterpsudocodes(yer) {
+            let sahmi = false;
+            let beskisah = bsah;
+            let seskisah = ssah;
+            let sah = false;
+            yer = parseInt(yer);
+            let temp = [...code];
+            let color;
+            if (hamle % 2 == 0) {
+                color = 0;
+            }
+            else {
+                color = 1;
+            }
+            if (color == 0) {
+                if (code[yer] == "s") {
+                    sah = true;
+                }
+                for (let i = 0; i < 64; i++) {
+                    if (legalcode[i] == "1") {
+                        if (code[i] == "0") {
+                            code = [...temp];
+                            let gecici = code[i];
+                            code[i] = code[yer];
+                            code[yer] = "0";
+                        }
+                        else {
+                            code = [...temp];
+                            code[i] = code[yer];
+                            code[yer] = "0";
+                        }
+                        if (sah) {
+                            bsah = i;
+                        }
+                        for (let j = 0; j < 64; j++) {
+                            if (code[j] != "0") {
+                                if (code[j].toUpperCase() == code[j]) {
+                                    if (sah) {
+                                        bsah = i;
+                                        code[bsah] = "s";
+                                        code[beskisah] = "0";
+                                    }
+                                    let temp2 = [...legalcode];
+                                    legalcode = [...code];
+                                    generatemoves(j);
+                                    if (legalcode[bsah] == "1") {
+                                        temp2[i] = "0";
+                                    }
+                                    legalcode = [...temp2];
+                                    bsah = beskisah;
+                                }
+                            }
+                        }
+                        code = [...temp];
+                    }
+                }
+            }
+            else {
+                if (code[yer] == "S") {
+                    sah = true;
+                }
+                for (let i = 0; i < 64; i++) {
+                    if (legalcode[i] == "1") {
+                        if (code[i] == "0") {
+                            code = [...temp];
+                            let gecici = code[i];
+                            code[i] = code[yer];
+                            code[yer] = "0";
+                        }
+                        else {
+                            code = [...temp];
+                            code[i] = code[yer];
+                            code[yer] = "0";
+                        }
+                        if (sah) {
+                            ssah = i;
+                        }
+                        for (let j = 0; j < 64; j++) {
+                            if (code[j] != "0") {
+                                if (code[j].toLowerCase() == code[j]) {
+                                    if (sah) {
+                                        ssah = i;
+                                        code[ssah] = "S";
+                                        code[seskisah] = "0";
+                                    }
+                                    let temp2 = [...legalcode];
+                                    legalcode = [...code];
+                                    generatemoves(j);
+                                    if (legalcode[ssah] == "1") {
+                                        temp2[i] = "0";
+                                    }
+                                    legalcode = [...temp2];
+                                    ssah = seskisah;
+                                }
+                            }
+                        }
+                        code = [...temp];
+                    }
+                }
+            }
+        }
+
+        function generatemoves(tasnumber) {
+            let hamlevarmi = false;
+            tasnumber = parseInt(tasnumber);
+            let yukari = 0;
+            let asagi = 0;
+            let sol = 0;
+            let sag = 0;
+            let a, b, c, d;
+            let k = tasnumber;
+            let tas = code[tasnumber];
+            switch (tas) {
+                case "k":
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    break;
+                case "K":
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    break;
+                case "p":
+                    if (tasnumber == 48 || tasnumber == 49 || tasnumber == 50 || tasnumber == 51 || tasnumber == 52 || tasnumber == 53 || tasnumber == 54 || tasnumber == 55) {
+                        if (legalcode[tasnumber - 8] == "0") {
+                            legalcode[tasnumber - 8] = "1"; hamlevarmi = true;
+
+                            if (legalcode[tasnumber - 16] == "0") {
+                                legalcode[tasnumber - 16] = "1"; hamlevarmi = true;
+
+                            }
+                        }
+                    }
+                    if (tasnumber % 8 == 7) {
+                        if (legalcode[tasnumber - 9] != "0" && legalcode[tasnumber - 9].toUpperCase() == legalcode[tasnumber - 9]) {
+                            legalcode[tasnumber - 9] = "1"; hamlevarmi = true;
+
+                        }
+                    }
+                    else if (tasnumber % 8 == 0) {
+                        if (legalcode[tasnumber - 7] != "0" && legalcode[tasnumber - 7].toUpperCase() == legalcode[tasnumber - 7]) {
+                            legalcode[tasnumber - 7] = "1"; hamlevarmi = true;
+
+                        }
+                    }
+                    else {
+                        if (legalcode[tasnumber - 9] != "0" && legalcode[tasnumber - 9].toUpperCase() == legalcode[tasnumber - 9]) {
+                            legalcode[tasnumber - 9] = "1"; hamlevarmi = true;
+
+                        }
+                        if (legalcode[tasnumber - 7] != "0" && legalcode[tasnumber - 7].toUpperCase() == legalcode[tasnumber - 7]) {
+                            legalcode[tasnumber - 7] = "1"; hamlevarmi = true;
+
+                        }
+                    }
+                    if (legalcode[tasnumber - 8] == "0") {
+                        legalcode[tasnumber - 8] = "1"; hamlevarmi = true;
+
+                    }
+                    break;
+                case "P":
+                    if (tasnumber == 8 || tasnumber == 9 || tasnumber == 10 || tasnumber == 11 || tasnumber == 12 || tasnumber == 13 || tasnumber == 14 || tasnumber == 15) {
+                        if (legalcode[tasnumber + 8] == "0") {
+                            legalcode[tasnumber + 8] = "1"; hamlevarmi = true;
+
+                            if (legalcode[tasnumber + 16] == "0") {
+                                legalcode[tasnumber + 16] = "1"; hamlevarmi = true;
+
+                            }
+                        }
+                    }
+                    if (tasnumber % 8 == 7) {
+                        if (legalcode[tasnumber + 7] != "0" && legalcode[tasnumber + 7].toLowerCase() == legalcode[tasnumber + 7]) {
+                            legalcode[tasnumber + 7] = "1"; hamlevarmi = true;
+
+                        }
+                    }
+                    else if (tasnumber % 8 == 0) {
+                        if (legalcode[tasnumber + 9] != "0" && legalcode[tasnumber + 9].toLowerCase() == legalcode[tasnumber + 9]) {
+                            legalcode[tasnumber + 9] = "1"; hamlevarmi = true;
+
+                        }
+                    }
+                    else {
+                        if (legalcode[tasnumber + 9] != "0" && legalcode[tasnumber + 9].toLowerCase() == legalcode[tasnumber + 9]) {
+                            legalcode[tasnumber + 9] = "1"; hamlevarmi = true;
+
+                        }
+                        if (legalcode[tasnumber + 7] != "0" && legalcode[tasnumber + 7].toLowerCase() == legalcode[tasnumber + 7]) {
+                            legalcode[tasnumber + 7] = "1"; hamlevarmi = true;
+
+                        }
+                    }
+                    if (legalcode[tasnumber + 8] == "0") {
+                        legalcode[tasnumber + 8] = "1"; hamlevarmi = true;
+
+                    }
+                    break;
+                case "a":
+                    if (tasnumber > 15 && tasnumber < 48) {
+                        if (tasnumber % 8 != 0 && tasnumber % 8 != 7 && tasnumber % 8 != 1 && tasnumber % 8 != 6) {
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+
+                            }
+                            if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+
+                            }
+                            if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                legalcode[tasnumber - 6] = "1"; hamlevarmi = true;;
+                            }
+                            if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                        }
+                    }
+                    if (tasnumber > 15 && tasnumber < 48) {
+                        if (tasnumber % 8 == 0) {
+                            if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 10]) {
+                                legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                        }
+                        if (tasnumber % 8 == 7) {
+                            if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                        }
+                        if (tasnumber % 8 == 1) {
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                        }
+                        if (tasnumber % 8 == 6) {
+                            if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                        }
+
+                    }
+                    if (tasnumber < 16) {
+                        if (tasnumber < 8) {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                        else {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toUpperCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toUpperCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                    }
+                    if (tasnumber > 47) {
+                        if (tasnumber > 55) {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                        else {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toUpperCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toUpperCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "A":
+                    if (tasnumber > 15 && tasnumber < 48) {
+                        if (tasnumber % 8 != 0 && tasnumber % 8 != 7 && tasnumber % 8 != 1 && tasnumber % 8 != 6) {
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                        }
+                    }
+                    if (tasnumber > 15 && tasnumber < 48) {
+                        if (tasnumber % 8 == 0) {
+                            if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 10]) {
+                                legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                        }
+                        if (tasnumber % 8 == 7) {
+                            if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                        }
+                        if (tasnumber % 8 == 1) {
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                        }
+                        if (tasnumber % 8 == 6) {
+                            if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                            }
+                            if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                            }
+                        }
+
+                    }
+                    if (tasnumber < 16) {
+                        if (tasnumber < 8) {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                        else {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 15] == "0" || legalcode[tasnumber + 15].toLowerCase() == legalcode[tasnumber + 15]) {
+                                    legalcode[tasnumber + 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 17] == "0" || legalcode[tasnumber + 17].toLowerCase() == legalcode[tasnumber + 17]) {
+                                    legalcode[tasnumber + 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                    }
+                    if (tasnumber > 47) {
+                        if (tasnumber > 55) {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toUpperCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toUpperCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toUpperCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toUpperCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                        else {
+                            if (tasnumber % 8 == 0) {
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 7) {
+
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 1) {
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else if (tasnumber % 8 == 6) {
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                            }
+                            else {
+                                if (legalcode[tasnumber + 6] == "0" || legalcode[tasnumber + 6].toLowerCase() == legalcode[tasnumber + 6]) {
+                                    legalcode[tasnumber + 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 10] == "0" || legalcode[tasnumber - 10].toLowerCase() == legalcode[tasnumber - 10]) {
+                                    legalcode[tasnumber - 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 6] == "0" || legalcode[tasnumber - 6].toLowerCase() == legalcode[tasnumber - 6]) {
+                                    legalcode[tasnumber - 6] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber + 10] == "0" || legalcode[tasnumber + 10].toLowerCase() == legalcode[tasnumber + 10]) {
+                                    legalcode[tasnumber + 10] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 15] == "0" || legalcode[tasnumber - 15].toLowerCase() == legalcode[tasnumber - 15]) {
+                                    legalcode[tasnumber - 15] = "1"; hamlevarmi = true;
+                                }
+                                if (legalcode[tasnumber - 17] == "0" || legalcode[tasnumber - 17].toLowerCase() == legalcode[tasnumber - 17]) {
+                                    legalcode[tasnumber - 17] = "1"; hamlevarmi = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "f":
+                    sag = 0;
+                    sol = 0;
+                    yukari = 0;
+                    asagi = 0;
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        sag++;
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        sol++;
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        asagi++;
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        yukari++;
+                    }
+                    k = tasnumber;
+                    a = Math.min(sol, yukari);
+                    b = Math.min(sag, yukari);
+                    c = Math.min(sol, asagi);
+                    d = Math.min(sag, asagi);
+                    for (let i = 0; i < a; i++, k -= 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < b; i++, k -= 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < c; i++, k += 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < d; i++, k += 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    break;
+                case "F":
+                    sag = 0;
+                    sol = 0;
+                    yukari = 0;
+                    asagi = 0;
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        sag++;
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        sol++;
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        asagi++;
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        yukari++;
+                    }
+                    k = tasnumber;
+                    a = Math.min(sol, yukari);
+                    b = Math.min(sag, yukari);
+                    c = Math.min(sol, asagi);
+                    d = Math.min(sag, asagi);
+                    for (let i = 0; i < a; i++, k -= 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < b; i++, k -= 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < c; i++, k += 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < d; i++, k += 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    break;
+                case "v":
+                    sag = 0;
+                    sol = 0;
+                    yukari = 0;
+                    asagi = 0;
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        sag++;
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        sol++;
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        asagi++;
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        yukari++;
+                    }
+                    k = tasnumber;
+                    a = Math.min(sol, yukari);
+                    b = Math.min(sag, yukari);
+                    c = Math.min(sol, asagi);
+                    d = Math.min(sag, asagi);
+                    for (let i = 0; i < a; i++, k -= 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < b; i++, k -= 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < c; i++, k += 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < d; i++, k += 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toLowerCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toLowerCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toLowerCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toLowerCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    break;
+                case "V":
+                    sag = 0;
+                    sol = 0;
+                    yukari = 0;
+                    asagi = 0;
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        sag++;
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        sol++;
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        asagi++;
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        yukari++;
+                    }
+                    k = tasnumber;
+                    a = Math.min(sol, yukari);
+                    b = Math.min(sag, yukari);
+                    c = Math.min(sol, asagi);
+                    d = Math.min(sag, asagi);
+                    for (let i = 0; i < a; i++, k -= 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < b; i++, k -= 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < c; i++, k += 7) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    k = tasnumber;
+                    for (let i = 0; i < d; i++, k += 9) {
+                        if (legalcode[k] == "0") {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[k].toUpperCase() != legalcode[k] && k != tasnumber) {
+                            legalcode[k] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[k].toUpperCase() == legalcode[k] && k != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        if (legalcode[i] == "0") {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[i].toUpperCase() != legalcode[i] && i != tasnumber) {
+                            legalcode[i] = "1"; hamlevarmi = true;
+                            break;
+                        }
+                        else if (legalcode[i].toUpperCase() == legalcode[i] && i != tasnumber) {
+                            break;
+                        }
+                    }
+                    break;
+                case "S":
+                    sag = 0;
+                    sol = 0;
+                    yukari = 0;
+                    asagi = 0;
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        sag++;
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        sol++;
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        asagi++;
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        yukari++;
+                    }
+                    k = tasnumber;
+                    a = Math.min(sol, yukari);
+                    b = Math.min(sag, yukari);
+                    c = Math.min(sol, asagi);
+                    d = Math.min(sag, asagi);
+                    if (a > 1) {
+                        if (legalcode[tasnumber - 9] == "0") {
+                            legalcode[tasnumber - 9] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 9].toUpperCase() != legalcode[tasnumber - 9]) {
+                            legalcode[tasnumber - 9] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (b > 1) {
+                        if (legalcode[tasnumber - 7] == "0") {
+                            legalcode[tasnumber - 7] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 7].toUpperCase() != legalcode[tasnumber - 7]) {
+                            legalcode[tasnumber - 7] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (c > 1) {
+                        if (legalcode[tasnumber + 7] == "0") {
+                            legalcode[tasnumber + 7] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 7].toUpperCase() != legalcode[tasnumber + 7]) {
+                            legalcode[tasnumber + 7] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (d > 1) {
+                        if (legalcode[tasnumber + 9] == "0") {
+                            legalcode[tasnumber + 9] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 9].toUpperCase() != legalcode[tasnumber + 9]) {
+                            legalcode[tasnumber + 9] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (tasnumber > 7) {
+                        if (legalcode[tasnumber - 8] == "0") {
+                            legalcode[tasnumber - 8] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 8].toUpperCase() != legalcode[tasnumber - 8]) {
+                            legalcode[tasnumber - 8] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (tasnumber < 56) {
+                        if (legalcode[tasnumber + 8] == "0") {
+                            legalcode[tasnumber + 8] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 8].toUpperCase() != legalcode[tasnumber + 8]) {
+                            legalcode[tasnumber + 8] = "1"; hamlevarmi = true;
+                        }
+
+                    }
+                    if (tasnumber % 8 != 0) {
+                        if (legalcode[tasnumber - 1] == "0") {
+                            legalcode[tasnumber - 1] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 1].toUpperCase() != legalcode[tasnumber - 1]) {
+                            legalcode[tasnumber - 1] = "1"; hamlevarmi = true;
+                        }
+
+                    }
+                    if (tasnumber % 8 != 7) {
+                        if (legalcode[tasnumber + 1] == "0") {
+                            legalcode[tasnumber + 1] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 1].toUpperCase() != legalcode[tasnumber + 1]) {
+                            legalcode[tasnumber + 1] = "1"; hamlevarmi = true;
+                        }
+
+                    }
+                    break;
+                case "s":
+                    sag = 0;
+                    sol = 0;
+                    yukari = 0;
+                    asagi = 0;
+                    for (let i = tasnumber; i < tasnumber + 8 - tasnumber % 8; i++) {
+                        sag++;
+                    }
+                    for (let i = tasnumber; i > tasnumber - tasnumber % 8 - 1; i--) {
+                        sol++;
+                    }
+                    for (let i = tasnumber; i <= 63; i += 8) {
+                        asagi++;
+                    }
+                    for (let i = tasnumber; i >= 0; i -= 8) {
+                        yukari++;
+                    }
+                    k = tasnumber;
+                    a = Math.min(sol, yukari);
+                    b = Math.min(sag, yukari);
+                    c = Math.min(sol, asagi);
+                    d = Math.min(sag, asagi);
+                    if (a > 1) {
+                        if (legalcode[tasnumber - 9] == "0") {
+                            legalcode[tasnumber - 9] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 9].toLowerCase() != legalcode[tasnumber - 9]) {
+                            legalcode[tasnumber - 9] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (b > 1) {
+                        if (legalcode[tasnumber - 7] == "0") {
+                            legalcode[tasnumber - 7] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 7].toLowerCase() != legalcode[tasnumber - 7]) {
+                            legalcode[tasnumber - 7] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (c > 1) {
+                        if (legalcode[tasnumber + 7] == "0") {
+                            legalcode[tasnumber + 7] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 7].toLowerCase() != legalcode[tasnumber + 7]) {
+                            legalcode[tasnumber + 7] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (d > 1) {
+                        if (legalcode[tasnumber + 9] == "0") {
+                            legalcode[tasnumber + 9] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 9].toLowerCase() != legalcode[tasnumber + 9]) {
+                            legalcode[tasnumber + 9] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (tasnumber > 7) {
+                        if (legalcode[tasnumber - 8] == "0") {
+                            legalcode[tasnumber - 8] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 8].toLowerCase() != legalcode[tasnumber - 8]) {
+                            legalcode[tasnumber - 8] = "1"; hamlevarmi = true;
+                        }
+                    }
+                    if (tasnumber < 56) {
+                        if (legalcode[tasnumber + 8] == "0") {
+                            legalcode[tasnumber + 8] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 8].toLowerCase() != legalcode[tasnumber + 8]) {
+                            legalcode[tasnumber + 8] = "1"; hamlevarmi = true;
+                        }
+
+                    }
+                    if (tasnumber % 8 != 0) {
+                        if (legalcode[tasnumber - 1] == "0") {
+                            legalcode[tasnumber - 1] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber - 1].toLowerCase() != legalcode[tasnumber - 1]) {
+                            legalcode[tasnumber - 1] = "1"; hamlevarmi = true;
+                        }
+
+                    }
+                    if (tasnumber % 8 != 7) {
+                        if (legalcode[tasnumber + 1] == "0") {
+                            legalcode[tasnumber + 1] = "1"; hamlevarmi = true;
+                        }
+                        else if (legalcode[tasnumber + 1].toLowerCase() != legalcode[tasnumber + 1]) {
+                            legalcode[tasnumber + 1] = "1"; hamlevarmi = true;
+                        }
+
+                    }
+                    break;
+            }
+            return hamlevarmi;
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+        preparetable();
+        decode(code);
+    </script>
+</body>
+
+</html>
