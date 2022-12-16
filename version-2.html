@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Satranç 2</title>
     <style>
         body {
             margin: 0px;
@@ -195,8 +198,9 @@
             <div></div>
         </div>
     </div>
-    <footer>Made by Rüzgar Erçen</footer>
+    <footer>Made by KEPQU (Bu versiyonda PAT da MAT sayılmaktadır)</footer>
     <script>
+        const ses2 = new Audio("https://cdn.discordapp.com/attachments/942840154626883646/1046824473560629299/video.mp3");
         const audio = new Audio("https://cdn.discordapp.com/attachments/989901867259666472/1010580851236544633/tas.mp3");
         const h1 = document.getElementById("h1");
         const loader = document.getElementById("yuklenme");
@@ -397,7 +401,7 @@
                             puan += 10;
                             break;
                         case "S":
-                            puan += 100;
+                            puan += 10000;
                             break;
                         case "P":
                             puan += 1;
@@ -416,7 +420,7 @@
                             puan -= 10;
                             break;
                         case "s":
-                            puan -= 100;
+                            puan -= 10000;
                             break;
                         case "p":
                             puan -= 1;
@@ -462,9 +466,10 @@
                     let buggerssah2 = ssah;
                     let secondmoves = movearrayfinder();
                     if (secondmoves.length < 1) {
-                        beyazeniyiarr.push({ "puan": +10000, "hamle": [move.tas, hareket] });
+                        beyazeniyiarr.push({ "puan": Infinity, "hamle": [move.tas, hareket] });
                         setTimeout(() => {
                             h1.innerHTML = "Siyah kazandı";
+                            ses2.play();
                         }, 1000);
                     }
                     else {
@@ -484,8 +489,10 @@
                                 let buggerssah3 = ssah;
                                 let thirdmoves = movearrayfinder();
                                 if (thirdmoves.length < 1) {
-                                    beyazeniyi = -10000;
-                                    beyazeniyiarr[i] = { "puan": -10000, "hamle": [move.tas, hareket] };
+                                    console.log("mat")
+                                    beyazeniyi = -Infinity;
+                                    beyazeniyiarr[i] = { "puan": -Infinity, "hamle": [move.tas, hareket] };
+                                    ekeleman = {"puan":-Infinity,"hamle":[move.tas, hareket]};
                                 }
                                 else {
                                     let res;
